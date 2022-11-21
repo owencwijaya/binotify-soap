@@ -1,16 +1,7 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: risqi
-  Date: 19/11/22
-  Time: 11.01
-  To change this template use File | Settings | File Templates.
---%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
-<head>
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+<?xml version="1.0" encoding="UTF-8"?>
+<endpoints xmlns="http://java.sun.com/xml/ns/jax-ws/ri/runtime" version="2.0">
+    <endpoint
+            name="SubsriptionService"
+            implementation="com.binotify.TesServlet"
+            url-pattern="/services/subscription" />
+</endpoints>
