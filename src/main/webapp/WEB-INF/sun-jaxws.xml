@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <endpoints xmlns="http://java.sun.com/xml/ns/jax-ws/ri/runtime" version="2.0">
     <endpoint
-            name="SubsriptionService"
-            implementation="com.binotify.TesServlet"
-            url-pattern="/services/subscription" />
+        name="Get API Key"
+        implementation="com.binotify.services.security.GetAPIKey"
+        url-pattern="/services/security" />
 </endpoints>
