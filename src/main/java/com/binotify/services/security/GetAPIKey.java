@@ -1,5 +1,9 @@
 package com.binotify.services.security;
 
+import com.binotify.db.SQL;
+
+import java.sql.SQLException;
+
 import jakarta.annotation.Resource;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebService;
@@ -18,11 +22,21 @@ public class GetAPIKey {
 
     @WebMethod
     public String getAPIKey(
-        @WebParam(name = "username") String username
+        @WebParam(name = "user_id") int user_id
     ) throws Exception {
 
     // MessageContext mc = context.getMessageContext();
-        return "fortinaiti ila babaji " + username;
+
+        String token = "fortinaiti ila babaji " + user_id;
+        SQL SQLInstance = new SQL();
+
+        try{
+            SQLInstance.Execute("INSERT INTO api_key VALUES(\"" + token + "\", " + user_id + ")");
+        } catch (SQLException e){
+            return e.getMessage();
+        }
+
+        return "fortinaiti ila babaji " + user_id;
     }
     
 }
