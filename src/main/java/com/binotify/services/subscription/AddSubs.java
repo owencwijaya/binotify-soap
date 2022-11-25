@@ -1,5 +1,6 @@
-package com.binotify.services.security;
+package com.binotify.services.subscription;
 
+import com.binotify.Status;
 import com.binotify.db.SQLi;
 
 import java.sql.Connection;
@@ -15,40 +16,38 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.xml.ws.WebServiceContext;
 import jakarta.xml.ws.handler.MessageContext;
 
+
 @WebService
 @SOAPBinding(style = SOAPBinding.Style.RPC)
-public class GetAPIKey {
+public class AddSubs {
 
     @Resource
     private WebServiceContext context;
 
     @WebMethod
-    public String getAPIKey(
-        @WebParam(name = "user_id") int user_id
+    public String addSubs(
+        @WebParam(name = "creator_id") String creator_id,
+        @WebParam(name = "subscriber_id") int subscriber_id
     ) throws Exception {
 
         MessageContext mc = context.getMessageContext();
         HttpServletRequest req = (HttpServletRequest) mc.get(MessageContext.SERVLET_REQUEST);
-
         SQLi instance = SQLi.getInstance();
         instance.insertLog(req);
 
-        String token = "fortinaiti ila babaji " + user_id;
+        try {
+            String query = "INSERT INTO subscription VALUES(?, ?, \'PENDING\')";
 
-        try{
-            String query = "INSERT INTO api_key VALUES(?, ?)";
-            
             Connection conn = SQLi.getConn();
             PreparedStatement statement = conn.prepareStatement(query);
-            statement.setString(1, token);
-            statement.setInt(2, user_id);
-            
+            statement.setString(1, creator_id);
+            statement.setInt(2, subscriber_id);
+
             statement.executeUpdate();
-        } catch (SQLException e){
+        } catch (SQLException e) {
             return e.getMessage();
         }
 
-        return "fortinaiti ila babaji " + user_id;
+        return "Successfully added subscription";
     }
-    
 }

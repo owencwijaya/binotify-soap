@@ -4,4 +4,9 @@
         name="Get API Key"
         implementation="com.binotify.services.security.GetAPIKey"
         url-pattern="/services/security" />
+
+    <endpoint
+        name="Add Subscription"
+        implementation="com.binotify.services.subscription.AddSubs"
+        url-pattern="/services/subscription" />
 </endpoints>
