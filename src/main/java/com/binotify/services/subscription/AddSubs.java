@@ -1,6 +1,5 @@
 package com.binotify.services.subscription;
 
-import com.binotify.Status;
 import com.binotify.db.SQLi;
 
 import java.sql.Connection;
@@ -37,8 +36,9 @@ public class AddSubs {
 
         try {
             String query = "INSERT INTO subscription VALUES(?, ?, \'PENDING\')";
-
+            
             Connection conn = SQLi.getConn();
+            
             PreparedStatement statement = conn.prepareStatement(query);
             statement.setString(1, creator_id);
             statement.setInt(2, subscriber_id);

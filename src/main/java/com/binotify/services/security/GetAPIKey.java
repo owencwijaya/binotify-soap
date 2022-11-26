@@ -6,6 +6,9 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import jakarta.annotation.Resource;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebService;
@@ -24,7 +27,7 @@ public class GetAPIKey {
 
     @WebMethod
     public String getAPIKey(
-        @WebParam(name = "user_id") int user_id
+        @WebParam(name = "user_id") String user_id
     ) throws Exception {
 
         MessageContext mc = context.getMessageContext();
@@ -33,22 +36,23 @@ public class GetAPIKey {
         SQLi instance = SQLi.getInstance();
         instance.insertLog(req);
 
-        String token = "fortinaiti ila babaji " + user_id;
+        String token = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date()) + user_id;
+        int hashedToken = token.hashCode();
 
         try{
             String query = "INSERT INTO api_key VALUES(?, ?)";
             
             Connection conn = SQLi.getConn();
             PreparedStatement statement = conn.prepareStatement(query);
-            statement.setString(1, token);
-            statement.setInt(2, user_id);
+            statement.setInt(1, hashedToken);
+            statement.setString(2, user_id);
             
             statement.executeUpdate();
         } catch (SQLException e){
             return e.getMessage();
         }
 
-        return "fortinaiti ila babaji " + user_id;
+        return Integer.toString(hashedToken);
     }
     
 }
