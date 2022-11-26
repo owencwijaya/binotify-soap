@@ -1,4 +1,4 @@
-package com.binotify;
+package com.binotify.models;
 
 public enum Status {
     PENDING,

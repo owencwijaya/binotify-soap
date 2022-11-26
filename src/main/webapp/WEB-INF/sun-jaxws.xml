@@ -3,10 +3,15 @@
     <endpoint
         name="Get API Key"
         implementation="com.binotify.services.security.GetAPIKey"
-        url-pattern="/services/security" />
+        url-pattern="/services/security/getAPIKey" />
 
     <endpoint
         name="Add Subscription"
         implementation="com.binotify.services.subscription.AddSubs"
-        url-pattern="/services/subscription" />
+        url-pattern="/services/subscription/addSubs" />
+    
+    <endpoint
+        name="Get Subscriptions"
+        implementation="com.binotify.services.subscription.GetSubs"
+        url-pattern="/services/subscription/getSubs" />
 </endpoints>

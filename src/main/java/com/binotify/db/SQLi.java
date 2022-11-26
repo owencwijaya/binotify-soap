@@ -67,5 +67,18 @@ public class SQLi {
         }
     }
 
+    public boolean checkAPIKey(String api_key, String user_id){
+        try{
+            String query = "SELECT * FROM api_key WHERE api_key = ? AND user_id = ?";
 
+            PreparedStatement statement = this.conn.prepareStatement(query);
+            statement.setString(1, api_key);
+            statement.setString(2, user_id);
+
+            return statement.executeQuery().next();
+        } catch (SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

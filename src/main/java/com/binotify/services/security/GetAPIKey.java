@@ -6,8 +6,9 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+
+import java.util.UUID;
+import java.nio.charset.Charset;
 
 import jakarta.annotation.Resource;
 import jakarta.jws.WebMethod;
@@ -36,15 +37,14 @@ public class GetAPIKey {
         SQLi instance = SQLi.getInstance();
         instance.insertLog(req);
 
-        String token = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date()) + user_id;
-        int hashedToken = token.hashCode();
+        String token = UUID.randomUUID().toString().replace("-", "");
 
         try{
             String query = "INSERT INTO api_key VALUES(?, ?)";
             
             Connection conn = SQLi.getConn();
             PreparedStatement statement = conn.prepareStatement(query);
-            statement.setInt(1, hashedToken);
+            statement.setString(1, token);
             statement.setString(2, user_id);
             
             statement.executeUpdate();
@@ -52,7 +52,7 @@ public class GetAPIKey {
             return e.getMessage();
         }
 
-        return Integer.toString(hashedToken);
+        return token;
     }
     
 }
