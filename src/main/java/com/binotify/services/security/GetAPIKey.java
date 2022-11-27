@@ -8,7 +8,6 @@ import java.sql.PreparedStatement;
 
 
 import java.util.UUID;
-import java.nio.charset.Charset;
 
 import jakarta.annotation.Resource;
 import jakarta.jws.WebMethod;
