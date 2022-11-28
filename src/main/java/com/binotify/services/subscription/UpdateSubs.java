@@ -2,10 +2,7 @@ package com.binotify.services.subscription;
 
 import com.binotify.db.SQLi;
 
-import java.io.DataOutputStream;
-import java.net.HttpURLConnection;
 import java.net.URI;
-import java.net.URL;
 import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
