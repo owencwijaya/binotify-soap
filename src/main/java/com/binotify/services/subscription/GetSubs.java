@@ -37,7 +37,6 @@ public class GetSubs {
     targetNamespace = "http://subscription.services.binotify.com/")
     public SubscriptionList getSubs(
         @WebParam(name = "api_key") String api_key,
-        @WebParam(name = "user_id") String user_id,
         @WebParam(name = "page") String page,
         @WebParam(name = "limit") String limit
     ) throws Exception {
@@ -50,10 +49,19 @@ public class GetSubs {
             // masukin ke log
             instance.insertLog(req);
             
-            // cek API key nya sesuai sama user_id ato ngga
-            if (!instance.checkAPIKey(api_key, user_id)){
-                throw new Exception("Invalid API key");
+            String restAPIKey = System.getenv("REST_API_KEY");
+            String appAPIKey = System.getenv("APP_API_KEY");
+            System.out.println("REST API key: " + restAPIKey);
+            System.out.println("App API key: " + appAPIKey);
+
+            Boolean isFromREST = api_key.equals(restAPIKey);
+            Boolean isFromApp = api_key.equals(appAPIKey);
+
+            // karena ini hanya untuk REST, jadi kalau bukan dari REST, langsung throw exception
+            if (!isFromREST){
+                throw new Exception("API key is invalid");
             }
+
         } catch (Exception e) {
             throw e;
         }
