@@ -11,3 +11,6 @@ services:
       - 4000:8080
     extra_hosts:
       - "host.docker.internal:host-gateway"
+    environment:
+      - REST_API_KEY=123456789
+      - APP_API_KEY=987654321
