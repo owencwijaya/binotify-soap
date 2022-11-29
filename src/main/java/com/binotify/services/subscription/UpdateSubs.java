@@ -2,10 +2,7 @@ package com.binotify.services.subscription;
 
 import com.binotify.db.SQLi;
 
-import java.io.DataOutputStream;
-import java.net.HttpURLConnection;
 import java.net.URI;
-import java.net.URL;
 import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -51,8 +48,17 @@ public class UpdateSubs {
             instance.insertLog(req);
             
             // cek API key nya sesuai sama user_id ato ngga
-            if (!instance.checkAPIKey(api_key, user_id)){
-                throw new Exception("Invalid API key");
+            String restAPIKey = System.getenv("REST_API_KEY");
+            String appAPIKey = System.getenv("APP_API_KEY");
+            System.out.println("REST API key: " + restAPIKey);
+            System.out.println("App API key: " + appAPIKey);
+
+            Boolean isFromREST = api_key.equals(restAPIKey);
+            Boolean isFromApp = api_key.equals(appAPIKey);
+
+            // karena ini hanya untuk REST, jadi kalau bukan dari REST, langsung throw exception
+            if (!isFromREST){
+                throw new Exception("API key is invalid");
             }
         } catch (Exception e) {
             throw e;
@@ -97,10 +103,6 @@ public class UpdateSubs {
         params.put("creator_id", creator_id);
         params.put("subscriber_id", Integer.toString(subscriber_id));
         params.put("new_status", new_status);
-
-
-
-
 
         StringBuilder result = new StringBuilder();
 

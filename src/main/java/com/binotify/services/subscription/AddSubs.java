@@ -26,13 +26,29 @@ public class AddSubs {
     @WebMethod
     public String addSubs(
         @WebParam(name = "creator_id") String creator_id,
-        @WebParam(name = "subscriber_id") int subscriber_id
+        @WebParam(name = "subscriber_id") int subscriber_id,
+        @WebParam(name = "api_key") String api_key
     ) throws Exception {
 
         MessageContext mc = context.getMessageContext();
         HttpServletRequest req = (HttpServletRequest) mc.get(MessageContext.SERVLET_REQUEST);
         SQLi instance = SQLi.getInstance();
         instance.insertLog(req);
+
+        // cek API key nya valid ato ngga
+        String restAPIKey = System.getenv("REST_API_KEY");
+        String appAPIKey = System.getenv("APP_API_KEY");
+        System.out.println("REST API key: " + restAPIKey);
+        System.out.println("App API key: " + appAPIKey);
+
+        Boolean isFromREST = api_key.equals(restAPIKey);
+        Boolean isFromApp = api_key.equals(appAPIKey);
+
+        // karena ini hanya untuk REST, jadi kalau bukan dari REST, langsung throw exception
+        if (!isFromApp){
+            throw new Exception("API key is invalid");
+        }
+    
 
         try {
             String query = "INSERT INTO subscription VALUES(?, ?, \'PENDING\')";

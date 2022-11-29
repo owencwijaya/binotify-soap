@@ -9,6 +9,11 @@
         name="Add Subscription"
         implementation="com.binotify.services.subscription.AddSubs"
         url-pattern="/services/subscription/addSubs" />
+
+    <endpoint
+        name="Check User Subscription"
+        implementation="com.binotify.services.subscription.CheckUserSubbed"
+        url-pattern="/services/subscription/checkUserSubbed" />
     
     <endpoint
         name="Get Subscriptions"
