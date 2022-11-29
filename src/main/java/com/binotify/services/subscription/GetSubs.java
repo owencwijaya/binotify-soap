@@ -37,7 +37,9 @@ public class GetSubs {
     targetNamespace = "http://subscription.services.binotify.com/")
     public SubscriptionList getSubs(
         @WebParam(name = "api_key") String api_key,
-        @WebParam(name = "user_id") String user_id
+        @WebParam(name = "user_id") String user_id,
+        @WebParam(name = "page") String page,
+        @WebParam(name = "limit") String limit
     ) throws Exception {
         MessageContext mc = context.getMessageContext();
         HttpServletRequest req = (HttpServletRequest) mc.get(MessageContext.SERVLET_REQUEST);
@@ -62,7 +64,7 @@ public class GetSubs {
 
             List<SubscriptionListElmt> subs = new ArrayList<SubscriptionListElmt>();
             
-            String query = "SELECT * FROM subscription";
+            String query = "SELECT * FROM subscription LIMIT " + limit + " OFFSET " + page;
             
             PreparedStatement statement = conn.prepareStatement(query);
             ResultSet res = statement.executeQuery();
