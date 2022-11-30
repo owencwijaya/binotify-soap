@@ -48,7 +48,8 @@ public class GetSubs {
         try{
             // masukin ke log
             instance.insertLog(req);
-            
+            System.out.println("Limit: "+limit);
+            System.out.println("Page: "+ page);
             String restAPIKey = System.getenv("REST_API_KEY");
             String appAPIKey = System.getenv("APP_API_KEY");
             System.out.println("REST API key: " + restAPIKey);
@@ -72,7 +73,8 @@ public class GetSubs {
 
             List<SubscriptionListElmt> subs = new ArrayList<SubscriptionListElmt>();
             
-            String query = "SELECT * FROM subscription LIMIT " + limit + " OFFSET " + page;
+            String query = "SELECT * FROM subscription LIMIT " + limit + ", " + page;
+            System.out.println(query);
             
             PreparedStatement statement = conn.prepareStatement(query);
             ResultSet res = statement.executeQuery();
