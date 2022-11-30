@@ -56,7 +56,7 @@ public class GetSubs {
             System.out.println("App API key: " + appAPIKey);
 
             Boolean isFromREST = api_key.equals(restAPIKey);
-            Boolean isFromApp = api_key.equals(appAPIKey);
+            //Boolean isFromApp = api_key.equals(appAPIKey);
 
             // karena ini hanya untuk REST, jadi kalau bukan dari REST, langsung throw exception
             if (!isFromREST){
@@ -73,7 +73,7 @@ public class GetSubs {
 
             List<SubscriptionListElmt> subs = new ArrayList<SubscriptionListElmt>();
             
-            String query = "SELECT * FROM subscription WHERE status = 'PENDING' LIMIT " + limit + ", " + page;
+            String query = "SELECT * FROM subscription WHERE status = 'PENDING' LIMIT " + (Integer.valueOf(limit)+1) + ", " + page;
             System.out.println(query);
             
             PreparedStatement statement = conn.prepareStatement(query);
