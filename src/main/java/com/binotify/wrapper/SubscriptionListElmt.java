@@ -8,10 +8,10 @@ import jakarta.xml.bind.annotation.*;
 @XmlRootElement(name = "subscription")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class SubscriptionListElmt {
-    @XmlElement(name = "creator-id", required = true)
+    @XmlElement(name = "creator_id", required = true)
     private String creator_id;
 
-    @XmlElement(name = "subscriber-id", required = true)
+    @XmlElement(name = "subscriber_id", required = true)
     private int subscriber_id;
 
     @XmlElement(name = "status", required = true)

@@ -73,7 +73,7 @@ public class GetSubs {
 
             List<SubscriptionListElmt> subs = new ArrayList<SubscriptionListElmt>();
             
-            String query = "SELECT * FROM subscription LIMIT " + limit + ", " + page;
+            String query = "SELECT * FROM subscription WHERE status = 'PENDING' LIMIT " + limit + ", " + page;
             System.out.println(query);
             
             PreparedStatement statement = conn.prepareStatement(query);

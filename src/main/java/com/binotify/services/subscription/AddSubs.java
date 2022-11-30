@@ -5,6 +5,7 @@ import com.binotify.db.SQLi;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 import jakarta.annotation.Resource;
 import jakarta.jws.WebMethod;
@@ -51,17 +52,36 @@ public class AddSubs {
     
 
         try {
-            String query = "INSERT INTO subscription VALUES(?, ?, \'PENDING\')";
-            
             Connection conn = SQLi.getConn();
-            
+
+            String query = "SELECT COUNT(*) FROM subscription WHERE creator_id = ? AND subscriber_id = ? AND status != 'REJECTED'";
             PreparedStatement statement = conn.prepareStatement(query);
+            statement.setString(1, creator_id);
+            statement.setInt(2, subscriber_id);
+
+            ResultSet res = statement.executeQuery();
+            int count = 0;
+            while (res.next()){
+                count = res.getInt("count");
+            }
+            
+            if (count > 0){
+                throw new Exception("User already sent a subscription");
+            }
+
+
+            query = "INSERT INTO subscription VALUES(?, ?, \'PENDING\')";
+        
+            
+            statement = conn.prepareStatement(query);
             statement.setString(1, creator_id);
             statement.setInt(2, subscriber_id);
 
             statement.executeUpdate();
         } catch (SQLException e) {
             return e.getMessage();
+        } catch (Exception e) {
+            throw e;
         }
 
         return "Successfully added subscription";
