@@ -46,7 +46,7 @@ public class CheckUserSubbed {
             Boolean isFromApp = api_key.equals(appAPIKey);
 
             // karena ini hanya untuk REST, jadi kalau bukan dari REST, langsung throw exception
-            if (!isFromApp){
+            if (!isFromREST){
                 throw new Exception("API key is invalid");
             }
         
@@ -56,20 +56,23 @@ public class CheckUserSubbed {
 
         try {
             Connection conn = SQLi.getConn();
-            
+            System.out.println(subscriber_id);
+            System.out.println(creator_id);
             String query = "SELECT status FROM subscription WHERE creator_id = ? AND subscriber_id = ?";
             PreparedStatement statement = conn.prepareStatement(query);
             statement.setString(1, creator_id);
             statement.setInt(2, subscriber_id);
 
             ResultSet res = statement.executeQuery();
-            
+
             String status = "";
             while (res.next()){
                 status = res.getString("status");
             }
 
-            if (status == "ACCEPTED"){
+            System.out.println(status);
+
+            if (status.equals("ACCEPTED")){
                 return true;
             } else {
                 return false;

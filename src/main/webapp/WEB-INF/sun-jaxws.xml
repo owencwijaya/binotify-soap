@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <endpoints xmlns="http://java.sun.com/xml/ns/jax-ws/ri/runtime" version="2.0">
-    <endpoint
+    <!-- <endpoint
         name="Get API Key"
         implementation="com.binotify.services.security.GetAPIKey"
-        url-pattern="/services/security/getAPIKey" />
+        url-pattern="/services/security/getAPIKey" /> -->
 
     <endpoint
         name="Add Subscription"
