@@ -1,6 +1,7 @@
 package com.binotify.services.subscription;
 
 import com.binotify.db.SQLi;
+import com.mysql.cj.xdevapi.JsonParser;
 
 import java.net.URI;
 import java.net.URLEncoder;
@@ -125,7 +126,6 @@ public class UpdateSubs {
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         System.out.println(response.body());
-
 
         return "Successfully updated subscription";
 
