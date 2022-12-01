@@ -63,13 +63,18 @@ public class GetSubs {
         
         try {
             Connection conn = SQLi.getConn();
-
+            System.out.println("page: " + page);
+            System.out.println("limit: " + limit);
             List<SubscriptionListElmt> subs = new ArrayList<SubscriptionListElmt>();
-            
-            String query = "SELECT * FROM subscription WHERE status = 'PENDING' LIMIT " + page + ", " + (Integer.valueOf(limit)+1) + ";" ;
-            System.out.println(query);
+
+            int lower_limit = (Integer.parseInt(page) - 1) * Integer.parseInt(limit);
+            System.out.println("lower limit: " + lower_limit);
+            String query = "SELECT * FROM subscription WHERE status = 'PENDING' LIMIT ? OFFSET ?;";
             
             PreparedStatement statement = conn.prepareStatement(query);
+            statement.setInt(1, Integer.parseInt(limit) + 1);
+            statement.setInt(2, lower_limit);
+
             ResultSet res = statement.executeQuery();
             
             while (res.next()){
