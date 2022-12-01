@@ -1,8 +1,8 @@
 version: "3.8"
 
 services:
-  sabun:
-    container_name: sabun
+  binotify-soap:
+    container_name: binotify-soap
     image: binotify-soap:latest
     build:
       context: .
