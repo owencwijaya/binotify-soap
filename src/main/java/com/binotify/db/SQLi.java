@@ -26,7 +26,6 @@ public class SQLi {
         try{
             this.conn = DriverManager.getConnection(DB_URL + "user=root&password=root");
         } catch (SQLException e){
-            System.out.println(e.getMessage());
             e.printStackTrace();
         }
     }

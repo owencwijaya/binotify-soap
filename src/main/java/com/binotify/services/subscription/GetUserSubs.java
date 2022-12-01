@@ -48,12 +48,7 @@ public class GetUserSubs {
             // masukin ke log
             instance.insertLog(req);
 
-            String restAPIKey = System.getenv("REST_API_KEY");
             String appAPIKey = System.getenv("APP_API_KEY");
-            System.out.println("REST API key: " + restAPIKey);
-            System.out.println("App API key: " + appAPIKey);
-
-            // Boolean isFromREST = api_key.equals(restAPIKey);
             Boolean isFromApp = api_key.equals(appAPIKey);
             if (!isFromApp){
                 throw new Exception("API key is invalid");
@@ -68,10 +63,8 @@ public class GetUserSubs {
             Connection conn = SQLi.getConn();
 
             List<SubscriptionListElmt> subs = new ArrayList<SubscriptionListElmt>();
-            System.out.println(api_key);
-            System.out.println(user_id);
+
             String query = "SELECT * FROM subscription WHERE subscriber_id = ?;" ;
-            System.out.println(query);
             
             PreparedStatement statement = conn.prepareStatement(query);
             statement.setInt(1, user_id);
@@ -85,11 +78,10 @@ public class GetUserSubs {
                 SubscriptionListElmt sub = new SubscriptionListElmt(
                     new Subscription(creator_id, subscriber_id, status)
                 );
-                System.out.println(sub);
 
                 subs.add(sub);
             }
-            System.out.println(subs);
+
             SubscriptionList subList = new SubscriptionList(subs);
             return subList;
         } catch (SQLException e) {

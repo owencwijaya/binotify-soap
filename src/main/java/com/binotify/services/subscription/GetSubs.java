@@ -48,15 +48,9 @@ public class GetSubs {
         try{
             // masukin ke log
             instance.insertLog(req);
-            System.out.println("Limit: "+limit);
-            System.out.println("Page: "+ page);
-            String restAPIKey = System.getenv("REST_API_KEY");
-            String appAPIKey = System.getenv("APP_API_KEY");
-            System.out.println("REST API key: " + restAPIKey);
-            System.out.println("App API key: " + appAPIKey);
 
+            String restAPIKey = System.getenv("REST_API_KEY");
             Boolean isFromREST = api_key.equals(restAPIKey);
-            // Boolean isFromApp = api_key.equals(appAPIKey);
 
             if (!isFromREST){
                 throw new Exception("API key is invalid");
@@ -86,11 +80,9 @@ public class GetSubs {
                 SubscriptionListElmt sub = new SubscriptionListElmt(
                     new Subscription(creator_id, subscriber_id, status)
                 );
-                System.out.println(sub);
 
                 subs.add(sub);
             }
-            System.out.println(subs);
             SubscriptionList subList = new SubscriptionList(subs);
             return subList;
         } catch (SQLException e) {

@@ -37,12 +37,7 @@ public class AddSubs {
         instance.insertLog(req);
 
         // cek API key nya valid ato ngga
-        String restAPIKey = System.getenv("REST_API_KEY");
         String appAPIKey = System.getenv("APP_API_KEY");
-        System.out.println("REST API key: " + restAPIKey);
-        System.out.println("App API key: " + appAPIKey);
-
-        Boolean isFromREST = api_key.equals(restAPIKey);
         Boolean isFromApp = api_key.equals(appAPIKey);
 
         // karena ini hanya untuk REST, jadi kalau bukan dari REST, langsung throw exception
@@ -66,7 +61,6 @@ public class AddSubs {
                 count = res.getInt(1);
             }
 
-            System.out.println(count);
             
             if (count > 0){
                 return "User already sent a subscription";

@@ -1,7 +1,6 @@
 package com.binotify.services.subscription;
 
 import com.binotify.db.SQLi;
-import com.mysql.cj.xdevapi.JsonParser;
 
 import java.net.URI;
 import java.net.URLEncoder;
@@ -24,6 +23,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.xml.ws.WebServiceContext;
 import jakarta.xml.ws.handler.MessageContext;
 
+import org.json.JSONObject;
 @WebService
 @SOAPBinding(style = SOAPBinding.Style.RPC)
 public class UpdateSubs {
@@ -50,12 +50,8 @@ public class UpdateSubs {
             
             // cek API key nya sesuai sama user_id ato ngga
             String restAPIKey = System.getenv("REST_API_KEY");
-            String appAPIKey = System.getenv("APP_API_KEY");
-            System.out.println("REST API key: " + restAPIKey);
-            System.out.println("App API key: " + appAPIKey);
 
             Boolean isFromREST = api_key.equals(restAPIKey);
-            Boolean isFromApp = api_key.equals(appAPIKey);
 
             // karena ini hanya untuk REST, jadi kalau bukan dari REST, langsung throw exception
             if (!isFromREST){
@@ -65,39 +61,6 @@ public class UpdateSubs {
             throw e;
         }
            
-        try {
-            Connection conn = SQLi.getConn();
-            
-            String query = "SELECT * FROM subscription WHERE creator_id = ? AND subscriber_id = ?";
-            PreparedStatement statement = conn.prepareStatement(query);
-            statement.setString(1, creator_id);
-            statement.setInt(2, subscriber_id);
-
-            ResultSet res = statement.executeQuery();
-            String status = "";
-
-            while (res.next()){
-                status = res.getString("status");
-            }
-            System.out.println(status);
-            if (!status.equals("PENDING")){
-                return "Subscription is not on pending";
-            }
-
-            query = "UPDATE subscription SET status = ? WHERE creator_id = ? AND subscriber_id = ? AND status = 'PENDING'";
-                        
-            statement = conn.prepareStatement(query);
-            statement.setString(1, new_status);
-            statement.setString(2, creator_id);
-            statement.setInt(3, subscriber_id);
-
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            return e.getMessage();
-        }
-
-        // send request to app to update
-        // HttpClient client = HttpClient.newHttpClient();
 
 
         Map<String, String> params = new HashMap<>();
@@ -125,10 +88,46 @@ public class UpdateSubs {
         .build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        System.out.println(response.body());
+
+        JSONObject resp = new JSONObject(response.body());
+        
+        int status = resp.getInt("status");
+
+        if (status != 200){
+            return "Failed to update subscription on PHP endpoint";
+        }
+
+        try {
+            Connection conn = SQLi.getConn();
+            
+            String query = "SELECT * FROM subscription WHERE creator_id = ? AND subscriber_id = ?";
+            PreparedStatement statement = conn.prepareStatement(query);
+            statement.setString(1, creator_id);
+            statement.setInt(2, subscriber_id);
+
+            ResultSet res = statement.executeQuery();
+            String sub_status = "";
+
+            while (res.next()){
+                sub_status = res.getString("status");
+            }
+
+            if (!sub_status.equals("PENDING")){
+                return "Subscription is not on pending";
+            }
+
+            query = "UPDATE subscription SET status = ? WHERE creator_id = ? AND subscriber_id = ? AND status = 'PENDING'";
+                        
+            statement = conn.prepareStatement(query);
+            statement.setString(1, new_status);
+            statement.setString(2, creator_id);
+            statement.setInt(3, subscriber_id);
+
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            return e.getMessage();
+        }
 
         return "Successfully updated subscription";
-
-        // habis ini kudu ngabarin si app dulu
     }
 }

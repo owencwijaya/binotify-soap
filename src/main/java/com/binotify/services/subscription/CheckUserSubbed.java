@@ -38,12 +38,8 @@ public class CheckUserSubbed {
             instance.insertLog(req);
 
             String restAPIKey = System.getenv("REST_API_KEY");
-            String appAPIKey = System.getenv("APP_API_KEY");
-            System.out.println("REST API key: " + restAPIKey);
-            System.out.println("App API key: " + appAPIKey);
-
             Boolean isFromREST = api_key.equals(restAPIKey);
-            Boolean isFromApp = api_key.equals(appAPIKey);
+
 
             // karena ini hanya untuk REST, jadi kalau bukan dari REST, langsung throw exception
             if (!isFromREST){
@@ -56,8 +52,6 @@ public class CheckUserSubbed {
 
         try {
             Connection conn = SQLi.getConn();
-            System.out.println(subscriber_id);
-            System.out.println(creator_id);
             String query = "SELECT status FROM subscription WHERE creator_id = ? AND subscriber_id = ?";
             PreparedStatement statement = conn.prepareStatement(query);
             statement.setString(1, creator_id);
@@ -70,7 +64,6 @@ public class CheckUserSubbed {
                 status = res.getString("status");
             }
 
-            System.out.println(status);
 
             if (status.equals("ACCEPTED")){
                 return true;
