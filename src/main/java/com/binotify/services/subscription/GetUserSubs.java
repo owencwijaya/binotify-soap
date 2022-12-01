@@ -27,7 +27,7 @@ import jakarta.xml.ws.RequestWrapper;
 
 @WebService
 @SOAPBinding(style = SOAPBinding.Style.RPC)
-public class GetSubs {
+public class GetUserSubs {
 
     @Resource
     private WebServiceContext context;
@@ -35,10 +35,9 @@ public class GetSubs {
     @WebMethod
     @RequestWrapper(className = "com.binotify.wrapper.SubscriptionList",
     targetNamespace = "http://subscription.services.binotify.com/")
-    public SubscriptionList getSubs(
+    public SubscriptionList getUserSubs(
         @WebParam(name = "api_key") String api_key,
-        @WebParam(name = "page") String page,
-        @WebParam(name = "limit") String limit
+        @WebParam(name = "user_id") int user_id
     ) throws Exception {
         MessageContext mc = context.getMessageContext();
         HttpServletRequest req = (HttpServletRequest) mc.get(MessageContext.SERVLET_REQUEST);
@@ -48,17 +47,15 @@ public class GetSubs {
         try{
             // masukin ke log
             instance.insertLog(req);
-            System.out.println("Limit: "+limit);
-            System.out.println("Page: "+ page);
+
             String restAPIKey = System.getenv("REST_API_KEY");
             String appAPIKey = System.getenv("APP_API_KEY");
             System.out.println("REST API key: " + restAPIKey);
             System.out.println("App API key: " + appAPIKey);
 
-            Boolean isFromREST = api_key.equals(restAPIKey);
-            // Boolean isFromApp = api_key.equals(appAPIKey);
-
-            if (!isFromREST){
+            // Boolean isFromREST = api_key.equals(restAPIKey);
+            Boolean isFromApp = api_key.equals(appAPIKey);
+            if (!isFromApp){
                 throw new Exception("API key is invalid");
             }
 
@@ -71,11 +68,13 @@ public class GetSubs {
             Connection conn = SQLi.getConn();
 
             List<SubscriptionListElmt> subs = new ArrayList<SubscriptionListElmt>();
-            
-            String query = "SELECT * FROM subscription WHERE status = 'PENDING' LIMIT " + page + ", " + (Integer.valueOf(limit)+1) + ";" ;
+            System.out.println(api_key);
+            System.out.println(user_id);
+            String query = "SELECT * FROM subscription WHERE subscriber_id = ?;" ;
             System.out.println(query);
             
             PreparedStatement statement = conn.prepareStatement(query);
+            statement.setInt(1, user_id);
             ResultSet res = statement.executeQuery();
             
             while (res.next()){

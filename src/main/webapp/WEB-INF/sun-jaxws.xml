@@ -21,6 +21,12 @@
         url-pattern="/services/subscription/getSubs" />
     
     <endpoint
+        name="Get User Subscriptions"
+        implementation="com.binotify.services.subscription.GetUserSubs"
+        url-pattern="/services/subscription/getUserSubs" />
+    
+    
+    <endpoint
         name="Update Subscriptions"
         implementation="com.binotify.services.subscription.UpdateSubs"
         url-pattern="/services/subscription/updateSubs" />
