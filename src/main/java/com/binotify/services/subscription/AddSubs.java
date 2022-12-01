@@ -61,12 +61,15 @@ public class AddSubs {
 
             ResultSet res = statement.executeQuery();
             int count = 0;
+
             while (res.next()){
-                count = res.getInt("count");
+                count = res.getInt(1);
             }
+
+            System.out.println(count);
             
             if (count > 0){
-                throw new Exception("User already sent a subscription");
+                return "User already sent a subscription";
             }
 
 

@@ -73,7 +73,7 @@ public class GetSubs {
 
             List<SubscriptionListElmt> subs = new ArrayList<SubscriptionListElmt>();
             
-            String query = "SELECT * FROM subscription WHERE status = 'PENDING' LIMIT " + (Integer.valueOf(limit)+1) + ", " + page;
+            String query = "SELECT * FROM subscription WHERE status = 'PENDING' LIMIT " + page + ", " + (Integer.valueOf(limit)+1) + ";" ;
             System.out.println(query);
             
             PreparedStatement statement = conn.prepareStatement(query);
@@ -91,7 +91,7 @@ public class GetSubs {
 
                 subs.add(sub);
             }
-
+            System.out.println(subs);
             SubscriptionList subList = new SubscriptionList(subs);
             return subList;
         } catch (SQLException e) {
