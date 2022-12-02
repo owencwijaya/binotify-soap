@@ -42,7 +42,7 @@ public class AddSubs {
 
         // karena ini hanya untuk REST, jadi kalau bukan dari REST, langsung throw exception
         if (!isFromApp){
-            throw new Exception("API key is invalid");
+            return ("API key is invalid");
         }
     
 
@@ -76,11 +76,13 @@ public class AddSubs {
 
             statement.executeUpdate();
         } catch (SQLException e) {
+            System.out.println(e.getMessage());
             return e.getMessage();
         } catch (Exception e) {
-            throw e;
+            System.out.println(e.getMessage());
+            return e.getMessage();
         }
 
-        return "Successfully added subscription";
+        return "Success";
     }
 }

@@ -82,20 +82,25 @@ public class UpdateSubs {
           resultString = resultString.substring(0, resultString.length() - 1);
         }
         
-        HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder()
-        .uri(URI.create("http://host.docker.internal:8000/api/premium/update_sub.php?" + resultString))
-        .build();
-
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-        JSONObject resp = new JSONObject(response.body());
-        
-        int status = resp.getInt("status");
-
-        if (status != 200){
+        try {
+            HttpClient client = HttpClient.newHttpClient();
+            HttpRequest request = HttpRequest.newBuilder()
+            .uri(URI.create("http://host.docker.internal:8000/api/premium/update_sub.php?" + resultString))
+            .build();
+    
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+    
+            JSONObject resp = new JSONObject(response.body());
+            
+            int status = resp.getInt("status");
+    
+            if (status != 200){
+                return "Failed to update subscription on PHP endpoint";
+            }
+        } catch (Exception e){
             return "Failed to update subscription on PHP endpoint";
         }
+
 
         try {
             Connection conn = SQLi.getConn();
@@ -125,9 +130,10 @@ public class UpdateSubs {
 
             statement.executeUpdate();
         } catch (SQLException e) {
+            System.out.println(e.getMessage());
             return e.getMessage();
         }
 
-        return "Successfully updated subscription";
+        return "Success";
     }
 }
